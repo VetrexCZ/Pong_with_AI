@@ -3,13 +3,13 @@
 import pygame
 import sys
 
-# Initialize Pygame
+# Initializing Pygame
 pygame.init()
 
 # Setting game window
 width, height = 800, 600
 win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Pong Game") # Window Name
+pygame.display.set_caption("Pong Game") # Displayet window name
 
 # Upload saved sounds
 collision_sound = pygame.mixer.Sound("Internet_projects\\Pong_with_AI\\event.mp3")
@@ -23,8 +23,8 @@ black = (0, 0, 0)
 player_width, player_height = 15, 100
 ball_size = 20
 
-# X stands for left player
-# Y stands for right player
+# X stands for left player (AI)
+# Y stands for right player (human)
 player1_x, player1_y = 50, height // 2 - player_height // 2 
 player2_x, player2_y = width - 50 - player_width, height // 2 - player_height // 2
 
@@ -85,7 +85,7 @@ while True:
         ball_speed_y *= -1
         collision_sound2.play() # Play sound if detects impact with upper and bottom wall
 
-    # Kontrola vítězství
+    # Win control
     if ball_x < 0 or ball_x > width:
         ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
     
@@ -95,5 +95,5 @@ while True:
     pygame.draw.rect(win, white, (player2_x, player2_y, player_width, player_height ))
     pygame.draw.ellipse(win, white, (ball_x, ball_y, ball_size, ball_size))
 
-    pygame.display.update() # Change update
+    pygame.display.update() # Update change
     clock.tick(75) # Frames per seconds
