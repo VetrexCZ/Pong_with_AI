@@ -3,97 +3,97 @@
 import pygame
 import sys
 
-# Inicializace Pygame
+# Initialize Pygame
 pygame.init()
 
-# Nastavení herního okna
+# Setting game window
 width, height = 800, 600
 win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Pong Game") # Název Okna
+pygame.display.set_caption("Pong Game") # Window Name
 
-# Nahrani zvukoveho souboru
+# Upload saved sounds
 collision_sound = pygame.mixer.Sound("Internet_projects\\Pong_with_AI\\event.mp3")
 collision_sound2 = pygame.mixer.Sound("Internet_projects\\Pong_with_AI\\event2.mp3")
 
-# Barvy
+# Colors
 white = (255, 255, 255)
 black = (0, 0, 0)
 
-# Velikost a pozice hráčů a mičku
+# Size and placement of players and ball
 player_width, player_height = 15, 100
 ball_size = 20
 
-# X levý hráč
-# Y pravý hráč
+# X stands for left player
+# Y stands for right player
 player1_x, player1_y = 50, height // 2 - player_height // 2 
 player2_x, player2_y = width - 50 - player_width, height // 2 - player_height // 2
 
 ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
-ball_speed_x, ball_speed_y = 5, 5 # Rychlost ve směru osy x a y
+ball_speed_x, ball_speed_y = 5, 5 # Ball speed on axis x and y
 
-# Funkce pro umelou inteligenci
+# Simple function for AI
 def artificial_intelligence(ball_y, player1_y):
     if ball_y < player1_y + player_height // 2:
-        return -5   # Pohyb nahoru
+        return -5   # Up direction
     elif ball_y > player1_y + player_height // 2:
-        return 5    # Pohyb dolu
+        return 5    # Down direction
     else:
-        return 0    # Zustane na miste
+        return 0    # Stays in place
 
-# Herní smyčka
+# Game loop
 clock = pygame.time.Clock()
 
-# Tlačítko pro zavření okna
+# Button for close a window
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
-    # Ovládání pomoci klávesnice
+    # Player keyboard control
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP] and player2_y > 0:
-        player2_y -= 5 # Velikost posunu
+        player2_y -= 5 # Shift size
     if keys[pygame.K_DOWN] and player2_y < height - player_height:
         player2_y += 5
 
-    # Umela inteligence pro prvniho hrace (levy hrac)
+    # AI stands for first player (left player)
     ai_movement = artificial_intelligence(ball_y, player1_y)
     player1_y += ai_movement
     
-    # Pohyb míčku
+    # Ball move
     ball_x += ball_speed_x
     ball_y += ball_speed_y
 
-    # Obbití míčku od hráču
+    # Ball bounce from players
     if (
         (player1_x < ball_x < player1_x + player_width)
         and (player1_y < ball_y < player1_y + player_height)
     ):
         ball_speed_x = abs(ball_speed_x)
-        collision_sound.play() # Prehraje zvuk pri detekci kolize
+        collision_sound.play() # Play sound if detects impact with player
     
     if (
         (player2_x < ball_x < player2_x + player_width)
         and (player2_y < ball_y < player2_y + player_height)
     ):
         ball_speed_x = -abs(ball_speed_x)
-        collision_sound.play() # Prehraje zvuk pri detekci kolize
+        collision_sound.play() # Play sound if detects impact with player
 
-    # Odbití míčku od stěn
+    # Ball bounce from upper and bottom wall
     if ball_y < 0 or ball_y > height - ball_size:
         ball_speed_y *= -1
-        collision_sound2.play() # Prehraje zvuk pri detekci horni a dolni steny
+        collision_sound2.play() # Play sound if detects impact with upper and bottom wall
 
     # Kontrola vítězství
     if ball_x < 0 or ball_x > width:
         ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
     
-    # Vykreslení herního pole
+    # Game zone rendering
     win.fill(black)
     pygame.draw.rect(win, white, (player1_x, player1_y, player_width, player_height ))
     pygame.draw.rect(win, white, (player2_x, player2_y, player_width, player_height ))
     pygame.draw.ellipse(win, white, (ball_x, ball_y, ball_size, ball_size))
 
-    pygame.display.update() # Aktualizace změn
-    clock.tick(75) # FPS
+    pygame.display.update() # Change update
+    clock.tick(75) # Frames per seconds
