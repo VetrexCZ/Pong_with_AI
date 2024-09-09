@@ -56,7 +56,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN: # Shut down program by 'esc' button
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
