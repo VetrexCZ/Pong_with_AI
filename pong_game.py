@@ -56,6 +56,10 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
 
     # Player keyboard control
     keys = pygame.key.get_pressed()
@@ -112,6 +116,6 @@ while True:
     win.blit(player1_text, (width // 4, 20))
     player2_text = font.render(str(player2_score), True, white)
     win.blit(player2_text, (width * 3 // 4, 20))
-    
+
     pygame.display.flip() # Update display
     clock.tick(75) # Frames per seconds
