@@ -33,6 +33,12 @@ ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
 ball_speed_x, ball_speed_y = 7, 7
 max_ball_speed = 10 # Ball speed
 
+# Scores
+player1_score, player2_score = 0, 0
+
+# Font for displaying the score
+font = pygame.font.Font(None, 74)
+
 # Simple function for AI
 def artificial_intelligence(ball_y, player1_y):
     if ball_y < player1_y + player_height // 2 and player1_y > 0:
@@ -84,10 +90,16 @@ while True:
         ball_speed_y *= -1
         collision_sound2.play() # Play sound if detects impact with upper and bottom wall
 
-    # Scoring system: reset ball
-    if ball_x <= 0 or ball_x >= width:
+    # Scoring system: reset ball and update score
+    if ball_x <= 0:
+        player2_score += 1
         ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
         ball_speed_x *= -1 # Change direction
+    if ball_x >= width:
+        player1_score += 1
+        ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
+        ball_speed_x *= -1 # Change direction
+
     
     # Game zone rendering
     win.fill(black)
@@ -95,5 +107,11 @@ while True:
     pygame.draw.rect(win, white, player2_rect)
     pygame.draw.ellipse(win, white, ball_rect)
 
+    # Render the scores
+    player1_text = font.render(str(player1_score), True, white)
+    win.blit(player1_text, (width // 4, 20))
+    player2_text = font.render(str(player2_score), True, white)
+    win.blit(player2_text, (width * 3 // 4, 20))
+    
     pygame.display.flip() # Update display
     clock.tick(75) # Frames per seconds
