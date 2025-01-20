@@ -1,19 +1,22 @@
 # Python Pong Game !
-
 import pygame
 import sys
+import os
 
 # Initializing Pygame
 pygame.init()
 
+# Configurable parameters
+frame_rate = 75
+
 # Setting game window
 width, height = 800, 600
 win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Pong Game") # Displayet window name
+pygame.display.set_caption("Pong Game") # Display window name
 
 # Upload saved sounds
-collision_sound = pygame.mixer.Sound("Internet_projects\\Pong_with_AI\\event.mp3")
-collision_sound2 = pygame.mixer.Sound("Internet_projects\\Pong_with_AI\\event2.mp3")
+collision_sound = pygame.mixer.Sound(os.path.join("Internet_projects", "Pong_with_AI", "event.mp3"))
+collision_sound2 = pygame.mixer.Sound(os.path.join("Internet_projects", "Pong_with_AI", "event2.mp3"))
 
 # Colors
 white = (255, 255, 255)
@@ -31,7 +34,6 @@ player2_x, player2_y = width - 50 - player_width, height // 2 - player_height //
 # Ball position
 ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
 ball_speed_x, ball_speed_y = 7, 7
-max_ball_speed = 10 # Ball speed
 
 # Scores
 player1_score, player2_score = 0, 0
@@ -40,7 +42,7 @@ player1_score, player2_score = 0, 0
 font = pygame.font.Font(None, 74)
 
 # Simple function for AI
-def artificial_intelligence(ball_y, player1_y):
+def ai_move(ball_y, player1_y):
     if ball_y < player1_y + player_height // 2 and player1_y > 0:
         return -6   # Up direction
     elif ball_y > player1_y + player_height // 2 and player1_y < height - player_height:
@@ -69,7 +71,7 @@ while True:
         player2_y += 7
 
     # AI stands for first player (left player)
-    ai_movement = artificial_intelligence(ball_y, player1_y)
+    ai_movement = ai_move(ball_y, player1_y)
     player1_y += ai_movement
     
     # Ball movement
@@ -118,4 +120,4 @@ while True:
     win.blit(player2_text, (width * 3 // 4, 20))
 
     pygame.display.flip() # Update display
-    clock.tick(75) # Frames per seconds
+    clock.tick(frame_rate) # Frames per seconds
