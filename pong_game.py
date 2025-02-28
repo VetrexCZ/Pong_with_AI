@@ -15,8 +15,9 @@ win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Pong Game") # Display window name
 
 # Upload saved sounds
-collision_sound = pygame.mixer.Sound(os.path.join("Internet_projects", "Pong_with_AI", "event.mp3"))
-collision_sound2 = pygame.mixer.Sound(os.path.join("Internet_projects", "Pong_with_AI", "event2.mp3"))
+base_path = os.path.dirname(__file__)
+collision_sound = pygame.mixer.Sound(os.path.join(base_path, "event.mp3"))
+collision_sound2 = pygame.mixer.Sound(os.path.join(base_path, "event2.mp3"))
 
 # Colors
 white = (255, 255, 255)
@@ -52,7 +53,7 @@ def ai_move(ball_y, player1_y):
 # Game loop
 clock = pygame.time.Clock()
 
-# Button for close a window
+# Event handling for closing the window
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -124,7 +125,6 @@ while True:
         ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
         player1_y = height // 2 - player_height // 2
         player2_y = height // 2 - player_height // 2
-
     
     # Game zone rendering
     win.fill(black)
