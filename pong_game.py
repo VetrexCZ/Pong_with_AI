@@ -105,6 +105,25 @@ while True:
         player1_score += 1
         ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
         ball_speed_x *= -1 # Change direction
+    
+    # Reset scores when either player reaches 10 points
+    if player1_score >= 10 or player2_score >= 10:
+        # Display winner message
+        winner_text = "AI WINS!" if player1_score >= 10 else "PLAYER WINS!"
+        winner_surface = font.render(winner_text, True, white)
+        winner_rect = winner_surface.get_rect(center=(width//2, height//2))
+        win.blit(winner_surface, winner_rect)
+        pygame.display.flip()
+
+        # Pause for 3 seconds
+        pygame.time.wait(3000)
+
+        # Reset scores, ball and paddles
+        player1_score = 0
+        player2_score = 0
+        ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
+        player1_y = height // 2 - player_height // 2
+        player2_y = height // 2 - player_height // 2
 
     
     # Game zone rendering
