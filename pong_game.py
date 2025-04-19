@@ -12,7 +12,7 @@ frame_rate = 75
 # Setting game window
 width, height = 800, 600
 win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Pong Game") # Display window name
+pygame.display.set_caption("Pong Game")
 
 # Upload saved sounds
 base_path = os.path.dirname(__file__)
@@ -45,10 +45,10 @@ font = pygame.font.Font(None, 74)
 # Simple function for AI
 def ai_move(ball_y, player1_y):
     if ball_y < player1_y + player_height // 2 and player1_y > 0:
-        return -6   # Up direction
+        return -6
     elif ball_y > player1_y + player_height // 2 and player1_y < height - player_height:
-        return 6    # Down direction
-    return 0    # No movement
+        return 6
+    return 0
 
 # Game loop
 clock = pygame.time.Clock()
@@ -59,7 +59,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.KEYDOWN: # Shut down program by 'esc' button
+        elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
@@ -67,7 +67,7 @@ while True:
     # Player keyboard control
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP] and player2_y > 0:
-        player2_y -= 7 # Shift size
+        player2_y -= 7
     if keys[pygame.K_DOWN] and player2_y < height - player_height:
         player2_y += 7
 
@@ -85,44 +85,53 @@ while True:
     ball_rect = pygame.Rect(ball_x, ball_y, ball_size, ball_size)
 
     if player1_rect.colliderect(ball_rect):
-        ball_speed_x = abs(ball_speed_x)
-        collision_sound.play() # Play sound if detects impact with player
+        ball_speed_x = abs(ball_speed_x) * 1.05
+        ball_speed_y *= 1.05
+        collision_sound.play()
     
     if player2_rect.colliderect(ball_rect):
-        ball_speed_x = -abs(ball_speed_x)
-        collision_sound.play() # Play sound if detects impact with player
+        ball_speed_x = -abs(ball_speed_x) * 1.05
+        ball_speed_y *= 1.05
+        collision_sound.play()
+
+    max_speed = 20
+    ball_speed_x = max(-max_speed, min(ball_speed_x, max_speed))
+    ball_speed_y = max(-max_speed, min(ball_speed_y, max_speed))
 
     # Ball and wall collision
     if ball_y <= 0 or ball_y >= height - ball_size:
         ball_speed_y *= -1
-        collision_sound2.play() # Play sound if detects impact with upper and bottom wall
+        collision_sound2.play()
 
     # Scoring system: reset ball and update score
     if ball_x <= 0:
         player2_score += 1
-        ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
-        ball_speed_x *= -1 # Change direction
+        ball_x = width // 2 + 80
+        ball_y = height // 2 - ball_size // 2
+        ball_speed_x = -4
+        ball_speed_y = 4
+
     if ball_x >= width:
         player1_score += 1
-        ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
-        ball_speed_x *= -1 # Change direction
+        ball_x = width // 2 - 80 - ball_size
+        ball_y = height // 2 - ball_size // 2
+        ball_speed_x = 4
+        ball_speed_y = 4
     
     # Reset scores when either player reaches 10 points
     if player1_score >= 10 or player2_score >= 10:
-        # Display winner message
         winner_text = "AI WINS!" if player1_score >= 10 else "PLAYER WINS!"
         winner_surface = font.render(winner_text, True, white)
         winner_rect = winner_surface.get_rect(center=(width//2, height//2))
         win.blit(winner_surface, winner_rect)
         pygame.display.flip()
-
-        # Pause for 3 seconds
         pygame.time.wait(3000)
-
-        # Reset scores, ball and paddles
         player1_score = 0
         player2_score = 0
-        ball_x, ball_y = width // 2 - ball_size // 2, height // 2 - ball_size // 2
+        ball_x = width // 2 - ball_size // 2
+        ball_y = height // 2 - ball_size // 2
+        ball_speed_x = 4
+        ball_speed_y = 4
         player1_y = height // 2 - player_height // 2
         player2_y = height // 2 - player_height // 2
     
@@ -138,5 +147,5 @@ while True:
     player2_text = font.render(str(player2_score), True, white)
     win.blit(player2_text, (width * 3 // 4, 20))
 
-    pygame.display.flip() # Update display
-    clock.tick(frame_rate) # Frames per seconds
+    pygame.display.flip()
+    clock.tick(frame_rate)
